@@ -56,3 +56,39 @@ WHEN '03' THEN '交雑種'
 END AS 品種, 出生日, 母牛番号 
 FROM 個体識別
 WHERE 母牛番号 IN (SELECT 個体識別番号 FROM 個体識別 WHERE 品種コード = '01');
+
+
+メンターさんからの課題
+年齢が50歳以上かつ、歩数平均が5,000歩以上のユーザー一覧を取得してください
+ 
+usersテーブルがあります。id, name（名前）、age（年齢）を持ちます
+stepsテーブルがあります。id, date（日付）、count（歩数）, user_idを持ちます
+
+SELECT users.名前, users.年齢, steps.AVG(歩数)
+FROM steps
+JOIN users
+ON steps.user_id = users.id
+WHERE users.年齢 >= 50
+GROUP BY steps.user_id
+HAVING users.AVG(歩数) >= 5000
+
+SELECT * FROM users
+WHERE 年齢 >= 50
+
+完全にGROUPBY句とSELECTを揃えなきゃいけないの忘れてた
+
+SELECT users.名前, AVG(歩数)
+FROM steps
+JOIN users
+ON steps.user_id = users.id
+WHERE users.年齢 >= 50
+GROUP BY users.名前
+HAVING AVG(歩数) >= 5000;
+
+SELECT users.名前, AVG(歩数)
+FROM users
+JOIN steps
+ON users.id = steps.user_id
+WHERE users.年齢 >= 50
+GROUP BY users.名前
+HAVING AVG(歩数) >= 5000;
